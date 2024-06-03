@@ -1,9 +1,7 @@
 import argparse
 import functools
-import inspect
-import os
 import re
-from typing import IO, Any, Callable, Iterable, Optional
+from typing import Iterable
 
 import dotenv
 import yaml

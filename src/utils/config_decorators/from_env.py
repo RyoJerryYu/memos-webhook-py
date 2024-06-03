@@ -1,7 +1,7 @@
 import functools
 import os
 import re
-from typing import IO, Any, Callable, Optional
+from typing import IO, Optional
 
 import dotenv
 from annotated_types import T
