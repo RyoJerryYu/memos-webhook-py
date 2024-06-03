@@ -3,3 +3,6 @@ pyyaml
 annotated_types
 dotenv
 dacite
+grpclib
+betterproto
+aiofiles
