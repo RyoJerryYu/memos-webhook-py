@@ -15,9 +15,6 @@ from src.webhook.types.webhook_payload import WebhookPayload
 
 from .base_plugin import BasePlugin, pluginLogger
 
-pattern_twitter = re.compile(r"https://twitter.com/\w+/status/\d+")
-pattern_x = re.compile(r"https://x.com/\w+/status/\d+")
-
 
 def extract_urls(content: str, patterns: list[re.Pattern[str]]) -> list[str]:
     """Extract urls match pattern from content."""

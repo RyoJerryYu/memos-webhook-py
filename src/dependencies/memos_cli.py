@@ -4,8 +4,11 @@ from dataclasses import dataclass
 from grpclib.client import Channel
 
 import proto.gen.memos.api.v1 as v1
-from src.dependencies.config import Config
-from src.utils.logger import logger
+from src.utils.logger import logger as util_logger
+
+from .config import Config
+
+logger = util_logger.getChild("memos_cli")
 
 
 @dataclass

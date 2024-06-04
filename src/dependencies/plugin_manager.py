@@ -1,7 +1,8 @@
-from src.dependencies.config import Config, PluginConfig, YouGetPluginConfig
-from src.dependencies.memos_cli import MemosCli
 from src.plugins.base_plugin import PluginExecutor, PluginProtocol
 from src.plugins.you_get_plugin import YouGetPlugin
+
+from .config import Config, PluginConfig, YouGetPluginConfig
+from .memos_cli import MemosCli
 
 _plugin_executor: PluginExecutor = None
 

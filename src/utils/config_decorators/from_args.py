@@ -3,8 +3,6 @@ import functools
 import re
 from typing import Iterable
 
-import dotenv
-import yaml
 from annotated_types import T
 
 from .common import ConfigProperty, always_property

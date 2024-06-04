@@ -6,6 +6,7 @@ import uvicorn.logging
 
 
 def logging_config(log_level: str = "info"):
+    """Return new `uvicorn.config.LOGGING_CONFIG` dict."""
     LOGGING_CONFIG = {
         "version": 1,
         "disable_existing_loggers": False,
