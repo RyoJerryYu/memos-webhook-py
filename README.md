@@ -1,6 +1,6 @@
 # Memos Webhook Python Implementation
 
-This is a simple webhook implementation in Python using Flask.
+This is a simple webhook implementation in Python.
 
 It implements a simple URL resource download feature. All url [you-get](https://github.com/soimort/you-get) support for command `you-get https://xxxxx` can be configured to download. 
 
