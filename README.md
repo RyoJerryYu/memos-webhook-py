@@ -19,7 +19,7 @@ It implements a simple URL resource download feature. All url [you-get](https://
         ports:
         - 5230:5230
     webhook:
-        image: ghcr.io/ryojerryyu/memos-webhook-py
+        image: ghcr.io/ryojerryyu/memos-webhook-py:0.2.0
         networks:
         - memos
         container_name: webhook
@@ -60,7 +60,7 @@ services:
     ports:
       - 5230:5230
   webhook:
-    image: webhook:0.0.44
+    image: ghcr.io/ryojerryyu/memos-webhook-py:0.2.0
     networks:
       - memos
     container_name: webhook
