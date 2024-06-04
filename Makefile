@@ -1,4 +1,4 @@
-.PHONY: gen update_deps run
+.PHONY: gen update_deps run freeze test
 
 gen:
 	@./proto/install_betterproto.sh
@@ -12,3 +12,6 @@ run:
 
 freeze:
 	@pip freeze > requirements.txt
+
+test:
+	@python -m unittest discover -p "*_test.py" src
