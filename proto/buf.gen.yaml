@@ -13,4 +13,4 @@ plugins:
   # https://github.com/danielgtaylor/python-betterproto/issues/574
   - local: protoc-gen-python_betterproto
     # https://github.com/danielgtaylor/python-betterproto
-    out: gen/python
+    out: gen
