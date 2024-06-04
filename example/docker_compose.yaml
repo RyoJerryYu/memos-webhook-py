@@ -2,16 +2,14 @@ version: "3.0"
 services:
   memos:
     networks:
-      - memos
+      - memos_example
     image: neosmemo/memos:0.22.1
-    container_name: memos
     ports:
       - 5230:5230
   webhook:
-    image: webhook:0.0.44
+    image: ghcr.io/ryojerryyu/memos-webhook-py:0.1.6
     networks:
-      - memos
-    container_name: webhook
+      - memos_example
     environment:
       - CONFIG_PATH=/app/config.yaml
     volumes:
@@ -19,4 +17,4 @@ services:
       - ./path/to/your/local/config/file.yaml:/app/config.yaml
 
 networks:
-  memos:
+  memos_example:

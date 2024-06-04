@@ -1,9 +1,9 @@
 webhook:
-  host: localhost
+  host: 0.0.0.0
   port: 11100
 
 memos:
-  host: localhost
+  host: memos
   port: 5230
   token: xxxxxxx
 
