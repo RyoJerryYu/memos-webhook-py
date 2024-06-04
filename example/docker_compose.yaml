@@ -1,0 +1,22 @@
+version: "3.0"
+services:
+  memos:
+    networks:
+      - memos
+    image: neosmemo/memos:0.22.1
+    container_name: memos
+    ports:
+      - 5230:5230
+  webhook:
+    image: webhook:0.0.44
+    networks:
+      - memos
+    container_name: webhook
+    environment:
+      - CONFIG_PATH=/app/config.yaml
+    volumes:
+      - ./.download:/app/download
+      - ./path/to/your/local/config/file.yaml:/app/config.yaml
+
+networks:
+  memos:

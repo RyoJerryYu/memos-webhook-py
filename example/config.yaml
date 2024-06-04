@@ -1,0 +1,16 @@
+webhook:
+  host: localhost
+  port: 11100
+
+memos:
+  host: localhost
+  port: 5230
+  token: xxxxxxx
+
+plugins:
+  you_get_plugins:
+    - name: download
+      tag: webhook/download
+      patterns:
+        - https://twitter.com/\w+/status/\d+
+        - https://x.com/\w+/status/\d+
