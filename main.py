@@ -18,7 +18,7 @@ def main():
 
     try:
         uvicorn.run(
-            app,
+            app.app,
             host=cfg.webhook_host,
             port=cfg.webhook_port,
             log_config=logging_config(cfg.log_level),
