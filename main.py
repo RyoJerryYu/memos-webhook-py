@@ -1,6 +1,6 @@
 import asyncio
 
-from src import app
+from src.app import app
 from src.dependencies.config import new_config
 from src.utils.logger import logger as util_logger
 from src.utils.logger import logging_config
@@ -18,7 +18,7 @@ def main():
 
     try:
         uvicorn.run(
-            app.app,
+            app,
             host=cfg.webhook_host,
             port=cfg.webhook_port,
             log_config=logging_config(cfg.log_level),
