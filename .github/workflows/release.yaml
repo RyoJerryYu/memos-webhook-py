@@ -36,10 +36,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          files: |
-            src/*
-            proto/gen/*
-            main.py
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           draft: false
