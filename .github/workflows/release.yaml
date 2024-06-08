@@ -57,13 +57,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
+          pip install build twine
       - name: Update version
         run: |
           sed -i "s/^version = \"0.0.0\"$/version = \"$GITHUB_REF_NAME\"/" pyproject.toml
+      - name: Build
+        run: python -m build
       - name: Publish to PyPI
-        run: |
-          python -m build
-          python -m twine upload --repository pypi dist/*
+        run: python -m twine upload --repository pypi dist/*
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
