@@ -15,3 +15,15 @@ freeze:
 
 test:
 	@python -m unittest discover -p "*_test.py" src
+
+.PHONY: package_build package_clean package_publish
+
+package_build:
+	@python -m build
+
+package_clean:
+	@rm -rf dist
+	@rm -rf *.egg-info
+
+package_publish:
+	@python -m twine upload dist/*
