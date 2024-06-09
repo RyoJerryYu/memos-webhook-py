@@ -3,8 +3,8 @@ from typing import TypedDict, override
 
 import memos_webhook.webhook.types.memo_service as webhook_types
 from memos_webhook.dependencies.memos_cli import MemosCli
+from memos_webhook.proto_gen.memos.api import v1
 from memos_webhook.webhook.types.webhook_payload import WebhookPayload
-from proto.gen.memos.api import v1
 
 from .base_plugin import BasePlugin
 

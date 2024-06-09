@@ -6,7 +6,7 @@ from typing import Annotated
 
 from fastapi import BackgroundTasks, Depends, FastAPI
 
-import proto.gen.memos.api.v1 as v1
+import memos_webhook.proto_gen.memos.api.v1 as v1
 from memos_webhook.dependencies.config import get_config, new_config
 from memos_webhook.dependencies.memos_cli import (MemosCli, get_memos_cli,
                                                   new_memos_cli)
