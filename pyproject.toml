@@ -26,5 +26,5 @@ dependencies = { file = ["requirements.txt"] }
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["proto*", "src*"]
+include = ["proto*", "memos_webhook*"]
 exclude = ["*_test.py"]

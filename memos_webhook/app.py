@@ -7,15 +7,16 @@ from typing import Annotated
 from fastapi import BackgroundTasks, Depends, FastAPI
 
 import proto.gen.memos.api.v1 as v1
-from src.dependencies.config import get_config, new_config
-from src.dependencies.memos_cli import MemosCli, get_memos_cli, new_memos_cli
-from src.dependencies.plugin_manager import (get_plugin_executor,
-                                             new_plugin_executor)
-from src.plugins.base_plugin import PluginExecutor
-from src.plugins.you_get_plugin import YouGetPlugin
-from src.utils.logger import logger as util_logger
-from src.utils.logger import logging_config
-from src.webhook.types.webhook_payload import WebhookPayload
+from memos_webhook.dependencies.config import get_config, new_config
+from memos_webhook.dependencies.memos_cli import (MemosCli, get_memos_cli,
+                                                  new_memos_cli)
+from memos_webhook.dependencies.plugin_manager import (get_plugin_executor,
+                                                       new_plugin_executor)
+from memos_webhook.plugins.base_plugin import PluginExecutor
+from memos_webhook.plugins.you_get_plugin import YouGetPlugin
+from memos_webhook.utils.logger import logger as util_logger
+from memos_webhook.utils.logger import logging_config
+from memos_webhook.webhook.types.webhook_payload import WebhookPayload
 
 logger = util_logger.getChild("app")
 

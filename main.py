@@ -1,9 +1,9 @@
 import asyncio
 
-from src.app import app
-from src.dependencies.config import new_config
-from src.utils.logger import logger as util_logger
-from src.utils.logger import logging_config
+from memos_webhook.app import app
+from memos_webhook.dependencies.config import new_config
+from memos_webhook.utils.logger import logger as util_logger
+from memos_webhook.utils.logger import logging_config
 
 logger = util_logger.getChild("main")
 

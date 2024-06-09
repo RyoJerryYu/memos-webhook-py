@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from grpclib.client import Channel
 
 import proto.gen.memos.api.v1 as v1
-from src.utils.logger import logger as util_logger
+from memos_webhook.utils.logger import logger as util_logger
 
 from .config import Config
 
