@@ -4,10 +4,10 @@ from typing import Protocol
 
 import betterproto.lib.google.protobuf as pb
 
-from proto.gen.memos.api import v1
-from src.dependencies.memos_cli import MemosCli
-from src.utils.logger import logger
-from src.webhook.types.webhook_payload import WebhookPayload
+from memos_webhook.dependencies.memos_cli import MemosCli
+from memos_webhook.proto_gen.memos.api import v1
+from memos_webhook.utils.logger import logger
+from memos_webhook.webhook.types.webhook_payload import WebhookPayload
 
 pluginLogger = logger.getChild("plugin")
 

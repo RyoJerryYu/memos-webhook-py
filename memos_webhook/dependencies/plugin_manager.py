@@ -1,5 +1,5 @@
-from src.plugins.base_plugin import PluginExecutor, PluginProtocol
-from src.plugins.you_get_plugin import YouGetPlugin
+from memos_webhook.plugins.base_plugin import PluginExecutor, PluginProtocol
+from memos_webhook.plugins.you_get_plugin import YouGetPlugin
 
 from .config import Config, PluginConfig, YouGetPluginConfig
 from .memos_cli import MemosCli

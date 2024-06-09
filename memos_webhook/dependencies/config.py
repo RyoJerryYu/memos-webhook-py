@@ -1,9 +1,11 @@
 from pydantic import BaseModel
 
-from src.utils.config_decorators import (ArgsConfigProvider, BaseArgsConfig,
-                                         BaseDotenvConfig, BaseUnmarshalConfig,
-                                         default, from_env, from_unmarshal,
-                                         it_is)
+from memos_webhook.utils.config_decorators import (ArgsConfigProvider,
+                                                   BaseArgsConfig,
+                                                   BaseDotenvConfig,
+                                                   BaseUnmarshalConfig,
+                                                   default, from_env,
+                                                   from_unmarshal, it_is)
 
 
 class YouGetPluginConfig(BaseModel):

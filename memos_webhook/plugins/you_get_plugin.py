@@ -8,10 +8,10 @@ import aiofiles
 import aiofiles.os
 import betterproto.lib.google.protobuf as pb
 
-from proto.gen.memos.api import v1
-from src.dependencies.config import YouGetPluginConfig
-from src.dependencies.memos_cli import MemosCli
-from src.webhook.types.webhook_payload import WebhookPayload
+from memos_webhook.dependencies.config import YouGetPluginConfig
+from memos_webhook.dependencies.memos_cli import MemosCli
+from memos_webhook.proto_gen.memos.api import v1
+from memos_webhook.webhook.types.webhook_payload import WebhookPayload
 
 from .base_plugin import BasePlugin, pluginLogger
 

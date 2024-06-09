@@ -14,7 +14,7 @@ freeze:
 	@pip freeze > requirements.txt
 
 test:
-	@python -m unittest discover -p "*_test.py" src
+	@python -m unittest discover -p "*_test.py" memos_webhook
 
 .PHONY: package_build package_clean package_publish
 
