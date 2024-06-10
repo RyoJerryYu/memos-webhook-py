@@ -2,19 +2,16 @@ version: "3.0"
 services:
   memos:
     networks:
-      - memos
+      - memos_webhook_test
     image: neosmemo/memos:0.22.1
-    container_name: memos
     ports:
-      - 5230:5230
+      - 5240:5230
   webhook:
-    image: ghcr.io/ryojerryyu/memos-webhook-py:test
     networks:
-      - memos
+      - memos_webhook_test
     build:
-      context: .
+      context: ..
       dockerfile: Dockerfile
-    container_name: webhook
     environment:
       - LOG_LEVEL=debug
       - MEMOS_HOST=memos
@@ -24,4 +21,4 @@ services:
       - ./.download:/app/download
 
 networks:
-  memos:
+  memos_webhook_test:
