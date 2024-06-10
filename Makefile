@@ -8,7 +8,7 @@ update_deps:
 	@./proto/update_deps.sh
 
 run:
-	@./run.sh
+	@./tests/run.sh
 
 freeze:
 	@pip freeze > requirements.txt

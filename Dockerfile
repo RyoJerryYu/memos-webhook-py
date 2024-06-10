@@ -9,8 +9,7 @@ COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY main.py /app/
-COPY proto/gen /app/proto/gen
-COPY src /app/src
+COPY memos_webhook /app/memos_webhook
 
 # Make port 8000 available to the environment outside this container
 EXPOSE 8000
