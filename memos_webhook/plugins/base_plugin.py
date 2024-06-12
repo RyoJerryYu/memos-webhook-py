@@ -132,14 +132,14 @@ class PluginExecutor:
         self.logger = logger.getChild("PluginExecutor")
 
     async def update_memo_content(
-        self, plugin: PluginProtocol, payload: WebhookPayload
+        self, plugin: PluginProtocol, payload: v1.WebhookRequestPayload
     ) -> v1.Memo:
         """update memo content
         Once the task triggered, will replace the `#tag` with `#tag/done`.
         If the `#tag` not exists, will add the `#tag/done` to first line.
         """
         self.logger.debug(
-            f"Background task started with param: {payload.model_dump_json()}"
+            f"Background task started with param: {payload.to_json()}"
         )
 
         res_memo = await plugin.task(payload, self.memos_cli)
