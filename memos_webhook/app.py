@@ -44,18 +44,32 @@ async def webhook_task(
     await executor.execute(payload)
 
 
-@app.post("/webhook")
-async def webhook_hanlder(
+@app.post("/webhook_old")
+async def webhook_old_hanlder(
     payload: WebhookPayload,
     background_tasks: BackgroundTasks,
     executor: Annotated[PluginExecutor, Depends(get_plugin_executor)],
 ):
+    """The old webhook handler, use specific json schema."""
     # 添加后台任务
     proto_payload = old_payload_to_proto(payload)
     background_tasks.add_task(webhook_task, proto_payload, executor)
     return {
         "code": 0,
         "message": f"Task started in background with param: {payload.model_dump_json()}",
+    }
+
+
+@app.post("/webhook")
+async def webhook_handler(
+    payload: v1.WebhookRequestPayload,
+    executor: Annotated[PluginExecutor, Depends(get_plugin_executor)],
+):
+    """The new webhook handler, use protojson."""
+    await executor.execute(payload)
+    return {
+        "code": 0,
+        "message": f"Task started with param: {payload.to_json()}",
     }
 
 
