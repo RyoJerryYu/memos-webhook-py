@@ -3,7 +3,7 @@ services:
   memos:
     networks:
       - memos_webhook_test
-    image: neosmemo/memos:0.22.1
+    image: neosmemo/memos:0.22.2
     ports:
       - 5240:5230
   webhook:

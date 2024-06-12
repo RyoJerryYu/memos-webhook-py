@@ -42,14 +42,14 @@ class YouGetPlugin(BasePlugin):
         return self.cfg.tag
 
     @override
-    def additional_trigger(self, payload: WebhookPayload) -> bool:
+    def additional_trigger(self, payload: v1.WebhookRequestPayload) -> bool:
         urls = extract_urls(payload.memo.content, self.patterns)
         if urls:
             return True
         return False
 
     @override
-    async def task(self, payload: WebhookPayload, memos_cli: MemosCli) -> v1.Memo:
+    async def task(self, payload: v1.WebhookRequestPayload, memos_cli: MemosCli) -> v1.Memo:
         memo_name = payload.memo.name
         self.logger.info(f"Start {self.cfg.name} webhook task for memo: {memo_name}")
 

@@ -38,7 +38,7 @@ It implements a simple URL resource download feature. All url [you-get](https://
 
 2. Run `docker-compose up -d` to start the services.
 
-3. Access `localhost:5230` , login and make sure the Memos server work. Create a webhook to `http://webhook:8000/webhook` .
+3. Access `localhost:5230` , login and make sure the Memos server work. Create a webhook to `http://webhook:8000/webhook` . (It's for Memos server after 0.22.2. For before 0.22.1, use `http://webhook:8000/webhook_old`)
 
 4. Post a memo with contents containing a twitter url. If that tweet was attached with some image, the webhook will download them and upload to the Memo server automatically.
 
