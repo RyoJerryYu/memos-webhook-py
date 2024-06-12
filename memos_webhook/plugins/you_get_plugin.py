@@ -49,7 +49,9 @@ class YouGetPlugin(BasePlugin):
         return False
 
     @override
-    async def task(self, payload: v1.WebhookRequestPayload, memos_cli: MemosCli) -> v1.Memo:
+    async def task(
+        self, payload: v1.WebhookRequestPayload, memos_cli: MemosCli
+    ) -> v1.Memo:
         memo_name = payload.memo.name
         self.logger.info(f"Start {self.cfg.name} webhook task for memo: {memo_name}")
 
@@ -66,7 +68,7 @@ class YouGetPlugin(BasePlugin):
         urls = extract_urls(payload.memo.content, self.patterns)
         if not urls:
             self.logger.info("No urls found")
-            return
+            return payload.memo
         self.logger.info(f"Extracted urls: {urls}")
 
         # mkdir
@@ -124,7 +126,4 @@ class YouGetPlugin(BasePlugin):
         )
         self.logger.info(f"Set memo resources: {[res.name for res in all_resources]}")
 
-        return v1.Memo(
-            name=memo_name,
-            content=payload.memo.content,
-        )
+        return payload.memo  # you-get plugin do not modify memo content
