@@ -19,8 +19,8 @@ class PluginProtocol(Protocol):
     Unless you know what you are doing."""
     def positive_tag(self) -> str: ...
     def negative_tag(self) -> str: ...
-    async def task(self, payload: WebhookPayload, memos_cli: MemosCli) -> v1.Memo: ...
-    def should_trigger(self, payload: WebhookPayload) -> bool: ...
+    async def task(self, payload: v1.WebhookRequestPayload, memos_cli: MemosCli) -> v1.Memo: ...
+    def should_trigger(self, payload: v1.WebhookRequestPayload) -> bool: ...
 
 
 class BasePlugin(PluginProtocol, ABC):
@@ -60,7 +60,7 @@ class BasePlugin(PluginProtocol, ABC):
         ...
 
     @abstractmethod
-    async def task(self, payload: WebhookPayload, memos_cli: MemosCli) -> v1.Memo:
+    async def task(self, payload: v1.WebhookRequestPayload, memos_cli: MemosCli) -> v1.Memo:
         """The webhook task function.
 
         Return the modified memo, and the plugin will auto update the memo with modified content and negative tag.
@@ -79,14 +79,14 @@ class BasePlugin(PluginProtocol, ABC):
         """The negative tag for the webhook plugin."""
         return f"#{self.tag()}/done"
 
-    def additional_trigger(self, payload: WebhookPayload) -> bool:
+    def additional_trigger(self, payload: v1.WebhookRequestPayload) -> bool:
         """The additional trigger besides the tag.
         If return True and negative tag not exists,
         the webhook will be triggered even if the tag not exists.
         """
         return False
 
-    def should_trigger(self, payload: WebhookPayload) -> bool:
+    def should_trigger(self, payload: v1.WebhookRequestPayload) -> bool:
         """Check if the rule should trigger by the payload.
 
         First check if the payload activity type is in the trigger activity types.
@@ -96,8 +96,8 @@ class BasePlugin(PluginProtocol, ABC):
         """
         assert payload.memo is not None, "payload memo is None"
 
-        if payload.activityType not in self.activity_types():
-            self.logger.info(f"activityType not match: {payload.activityType}")
+        if payload.activity_type not in self.activity_types():
+            self.logger.info(f"activityType not match: {payload.activity_type}")
             return False
 
         negative_tag, positive_tag = self.negative_tag(), self.positive_tag()
@@ -161,11 +161,11 @@ class PluginExecutor:
         )
         self.logger.debug(f"Updated memo content {updated_memo.content}")
 
-    async def execute(self, payload: WebhookPayload) -> None:
+    async def execute(self, payload: v1.WebhookRequestPayload) -> None:
         """Execute the webhook task by the rule."""
         for plugin in self.plugins:
             self.logger.info(f"Execute plugin: {plugin}")
-            if not plugin.should_trigger(payload):
+            if not plugin.should_trigger(payload=payload):
                 continue
 
             await self.update_memo_content(plugin, payload)

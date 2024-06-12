@@ -16,6 +16,7 @@ from memos_webhook.plugins.base_plugin import PluginExecutor
 from memos_webhook.plugins.you_get_plugin import YouGetPlugin
 from memos_webhook.utils.logger import logger as util_logger
 from memos_webhook.utils.logger import logging_config
+from memos_webhook.webhook.type_transform import old_payload_to_proto
 from memos_webhook.webhook.types.webhook_payload import WebhookPayload
 
 logger = util_logger.getChild("app")
@@ -37,7 +38,7 @@ app = FastAPI(lifespan=lifespan)
 
 
 async def webhook_task(
-    payload: WebhookPayload,
+    payload: v1.WebhookRequestPayload,
     executor: PluginExecutor,
 ):
     await executor.execute(payload)
@@ -50,7 +51,8 @@ async def webhook_hanlder(
     executor: Annotated[PluginExecutor, Depends(get_plugin_executor)],
 ):
     # 添加后台任务
-    background_tasks.add_task(webhook_task, payload, executor)
+    proto_payload = old_payload_to_proto(payload)
+    background_tasks.add_task(webhook_task, proto_payload, executor)
     return {
         "code": 0,
         "message": f"Task started in background with param: {payload.model_dump_json()}",

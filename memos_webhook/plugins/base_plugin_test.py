@@ -4,7 +4,6 @@ from typing import TypedDict, override
 import memos_webhook.webhook.types.memo_service as webhook_types
 from memos_webhook.dependencies.memos_cli import MemosCli
 from memos_webhook.proto_gen.memos.api import v1
-from memos_webhook.webhook.types.webhook_payload import WebhookPayload
 
 from .base_plugin import BasePlugin
 
@@ -19,7 +18,7 @@ class MockPlugin(BasePlugin):
         return "hook/download"
 
     @override
-    async def task(self, payload: WebhookPayload, memos_cli: MemosCli) -> v1.Memo:
+    async def task(self, payload: v1.WebhookRequestPayload, memos_cli: MemosCli) -> v1.Memo:
         return v1.Memo()
 
 
@@ -33,14 +32,14 @@ class MockOverwritePlugin(BasePlugin):
         return "hook/download"
     
     @override
-    def additional_trigger(self, payload: WebhookPayload) -> bool:
+    def additional_trigger(self, payload: v1.WebhookRequestPayload) -> bool:
         if payload.memo:
             return "overwrite" in payload.memo.content
         
         return False
 
     @override
-    async def task(self, payload: WebhookPayload, memos_cli: MemosCli) -> v1.Memo:
+    async def task(self, payload: v1.WebhookRequestPayload, memos_cli: MemosCli) -> v1.Memo:
         return v1.Memo()
 
 
@@ -85,8 +84,8 @@ class TestBasePlugin(unittest.IsolatedAsyncioTestCase):
             plugin = MockPlugin()
             self.assertEqual(
                 plugin.should_trigger(
-                    WebhookPayload(
-                        activityType=case["activityType"],
+                    v1.WebhookRequestPayload(
+                        activity_type=case["activityType"],
                         memo=webhook_types.Memo(content=case["content"]),
                     )
                 ),
@@ -132,8 +131,8 @@ class TestBasePlugin(unittest.IsolatedAsyncioTestCase):
             plugin = MockOverwritePlugin()
             self.assertEqual(
                 plugin.should_trigger(
-                    WebhookPayload(
-                        activityType=case["activityType"],
+                    v1.WebhookRequestPayload(
+                        activity_type=case["activityType"],
                         memo=webhook_types.Memo(content=case["content"]),
                     )
                 ),

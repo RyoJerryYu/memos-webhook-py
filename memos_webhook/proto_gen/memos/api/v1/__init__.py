@@ -907,6 +907,8 @@ class MemoProperty(betterproto.Message):
     tags: List[str] = betterproto.string_field(1)
     has_link: bool = betterproto.bool_field(2)
     has_task_list: bool = betterproto.bool_field(3)
+    has_code: bool = betterproto.bool_field(4)
+    has_incomplete_tasks: bool = betterproto.bool_field(5)
 
 
 @dataclass(eq=False, repr=False)
@@ -1172,8 +1174,8 @@ class DeleteMemoReactionRequest(betterproto.Message):
 class Webhook(betterproto.Message):
     id: int = betterproto.int32_field(1)
     creator_id: int = betterproto.int32_field(2)
-    created_time: datetime = betterproto.message_field(3)
-    updated_time: datetime = betterproto.message_field(4)
+    create_time: datetime = betterproto.message_field(3)
+    update_time: datetime = betterproto.message_field(4)
     row_status: "RowStatus" = betterproto.enum_field(5)
     name: str = betterproto.string_field(6)
     url: str = betterproto.string_field(7)
@@ -1214,6 +1216,15 @@ class DeleteWebhookRequest(betterproto.Message):
 
 
 @dataclass(eq=False, repr=False)
+class WebhookRequestPayload(betterproto.Message):
+    url: str = betterproto.string_field(1)
+    activity_type: str = betterproto.string_field(2)
+    creator_id: int = betterproto.int32_field(3)
+    create_time: datetime = betterproto.message_field(4)
+    memo: "Memo" = betterproto.message_field(5)
+
+
+@dataclass(eq=False, repr=False)
 class WorkspaceProfile(betterproto.Message):
     owner: str = betterproto.string_field(1)
     """The name of instance owner. Format: "users/{id}"""
@@ -1248,22 +1259,19 @@ class WorkspaceSetting(betterproto.Message):
 
 @dataclass(eq=False, repr=False)
 class WorkspaceGeneralSetting(betterproto.Message):
-    instance_url: str = betterproto.string_field(1)
-    """instance_url is the instance URL."""
-
-    disallow_signup: bool = betterproto.bool_field(2)
+    disallow_signup: bool = betterproto.bool_field(1)
     """disallow_signup is the flag to disallow signup."""
 
-    disallow_password_login: bool = betterproto.bool_field(3)
+    disallow_password_login: bool = betterproto.bool_field(2)
     """disallow_password_login is the flag to disallow password login."""
 
-    additional_script: str = betterproto.string_field(4)
+    additional_script: str = betterproto.string_field(3)
     """additional_script is the additional script."""
 
-    additional_style: str = betterproto.string_field(5)
+    additional_style: str = betterproto.string_field(4)
     """additional_style is the additional style."""
 
-    custom_profile: "WorkspaceCustomProfile" = betterproto.message_field(6)
+    custom_profile: "WorkspaceCustomProfile" = betterproto.message_field(5)
     """custom_profile is the custom profile."""
 
 
@@ -1314,6 +1322,12 @@ class WorkspaceMemoRelatedSetting(betterproto.Message):
 
     content_length_limit: int = betterproto.int32_field(3)
     """content_length_limit is the limit of content length. Unit is byte."""
+
+    enable_auto_compact: bool = betterproto.bool_field(4)
+    """enable_auto_compact enables auto compact for large content."""
+
+    enable_double_click_edit: bool = betterproto.bool_field(5)
+    """enable_double_click_edit enables editing on double click."""
 
 
 @dataclass(eq=False, repr=False)
