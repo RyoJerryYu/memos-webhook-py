@@ -73,6 +73,6 @@ def old_payload_to_proto(input: OldPayload) -> v1.WebhookRequestPayload:
         url=input.url,
         activity_type=input.activityType,
         creator_id=input.creatorId,
-        create_time=old_timestamp_to_proto(input.createdTs),
+        create_time=datetime.fromtimestamp(input.createdTs),
         memo=old_memo_to_proto(input.memo),
     )
