@@ -25,8 +25,16 @@ logger = util_logger.getChild("app")
 @contextlib.asynccontextmanager
 async def lifespan(app: FastAPI):
     try:
-        logger.debug("webhook server started")
+        # logger.debug("webhook server started")
+        logger.info("memos webhook server started")
         cfg = get_config()
+        logger.info(f"listen on: {cfg.webhook_host}:{cfg.webhook_port}")
+        logger.info(f"memos info: {cfg.memos_host}:{cfg.memos_port}")
+        logger.info(f"log level: {cfg.log_level}")
+        if cfg.plugins:
+            plugin_names = [plugin.name for plugin in cfg.plugins.you_get_plugins]
+            logger.info(f"plugins: {plugin_names}")
+        logger.info(f"")
         with new_memos_cli(cfg) as memos_cli:
             executor = new_plugin_executor(cfg, memos_cli)
             yield
