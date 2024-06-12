@@ -2,9 +2,9 @@ from __future__ import print_function
 
 import asyncio
 import contextlib
-from typing import Annotated
+from typing import Annotated, Any
 
-from fastapi import BackgroundTasks, Depends, FastAPI
+from fastapi import BackgroundTasks, Depends, FastAPI, Request
 
 import memos_webhook.proto_gen.memos.api.v1 as v1
 from memos_webhook.dependencies.config import get_config, new_config
@@ -62,14 +62,20 @@ async def webhook_old_hanlder(
 
 @app.post("/webhook")
 async def webhook_handler(
-    payload: v1.WebhookRequestPayload,
+    req: Request,
+    background_tasks: BackgroundTasks,
     executor: Annotated[PluginExecutor, Depends(get_plugin_executor)],
 ):
     """The new webhook handler, use protojson."""
-    await executor.execute(payload)
+    dict_json = await req.json()
+    logger.debug(f"webhook handler received request: {dict_json}")
+    logger.debug(f"type: {type(dict_json)}")
+
+    proto_payload = v1.WebhookRequestPayload().from_dict(dict_json)
+    background_tasks.add_task(webhook_task, proto_payload, executor)
     return {
         "code": 0,
-        "message": f"Task started with param: {payload.to_json()}",
+        "message": f"Task started with param: {proto_payload.to_json()}",
     }
 
 
