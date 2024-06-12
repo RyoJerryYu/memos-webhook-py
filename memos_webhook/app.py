@@ -77,7 +77,6 @@ async def webhook_handler(
     """The new webhook handler, use protojson."""
     dict_json = await req.json()
     logger.debug(f"webhook handler received request: {dict_json}")
-    logger.debug(f"type: {type(dict_json)}")
 
     proto_payload = v1.WebhookRequestPayload().from_dict(dict_json)
     background_tasks.add_task(webhook_task, proto_payload, executor)
