@@ -14,12 +14,15 @@ pluginLogger = logger.getChild("plugin")
 
 class PluginProtocol(Protocol):
     """The protocol that plugin executor trully need a plugin to implement.
-    
+
     You should implement `BasePlugin` instead of this protocol.
     Unless you know what you are doing."""
+
     def positive_tag(self) -> str: ...
     def negative_tag(self) -> str: ...
-    async def task(self, payload: v1.WebhookRequestPayload, memos_cli: MemosCli) -> v1.Memo: ...
+    async def task(
+        self, payload: v1.WebhookRequestPayload, memos_cli: MemosCli
+    ) -> v1.Memo: ...
     def should_trigger(self, payload: v1.WebhookRequestPayload) -> bool: ...
 
 
@@ -60,7 +63,9 @@ class BasePlugin(PluginProtocol, ABC):
         ...
 
     @abstractmethod
-    async def task(self, payload: v1.WebhookRequestPayload, memos_cli: MemosCli) -> v1.Memo:
+    async def task(
+        self, payload: v1.WebhookRequestPayload, memos_cli: MemosCli
+    ) -> v1.Memo:
         """The webhook task function.
 
         Return the modified memo, and the plugin will auto update the memo with modified content and negative tag.
@@ -138,9 +143,7 @@ class PluginExecutor:
         Once the task triggered, will replace the `#tag` with `#tag/done`.
         If the `#tag` not exists, will add the `#tag/done` to first line.
         """
-        self.logger.debug(
-            f"Background task started with param: {payload.to_json()}"
-        )
+        self.logger.debug(f"Background task started with param: {payload.to_json()}")
 
         res_memo = await plugin.task(payload, self.memos_cli)
         self.logger.info("Background task success completed")
@@ -169,5 +172,6 @@ class PluginExecutor:
                 continue
 
             await self.update_memo_content(plugin, payload)
+            return  # only execute one plugin
 
         self.logger.info("All plugins executed")
