@@ -143,10 +143,15 @@ class PluginExecutor:
         Once the task triggered, will replace the `#tag` with `#tag/done`.
         If the `#tag` not exists, will add the `#tag/done` to first line.
         """
-        self.logger.debug(f"Background task started with param: {payload.to_json()}")
+        self.logger.debug(f"Plugin task started with param: {payload.to_json()}")
 
         res_memo = await plugin.task(payload, self.memos_cli)
-        self.logger.info("Background task success completed")
+        self.logger.info("Plugin task success completed")
+        assert res_memo is not None, "task should return a memo"
+
+        if payload.activity_type == "memos.memo.deleted":
+            self.logger.info("Memo deleted, skip update memo content")
+            return
 
         # update memo
         if plugin.positive_tag() in res_memo.content:

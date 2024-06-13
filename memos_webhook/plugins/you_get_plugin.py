@@ -67,7 +67,9 @@ class YouGetPlugin(BasePlugin):
         # extract urls
         urls = extract_urls(payload.memo.content, self.patterns)
         if not urls:
-            self.logger.info("No urls found")
+            self.logger.info("Triggered but no urls found")
+            # trigger but no urls found, it may have a positive tag.
+            # Should update the tag and make sure it will not be triggered again
             return payload.memo
         self.logger.info(f"Extracted urls: {urls}")
 
