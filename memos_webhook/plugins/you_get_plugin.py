@@ -8,6 +8,8 @@ import aiofiles
 import aiofiles.os
 import betterproto.lib.google.protobuf as pb
 
+from memos_webhook.constants import (ACTIVITY_TYPE_CREATED,
+                                     ACTIVITY_TYPE_UPDATED)
 from memos_webhook.dependencies.config import YouGetPluginConfig
 from memos_webhook.dependencies.memos_cli import MemosCli
 from memos_webhook.proto_gen.memos.api import v1
@@ -35,7 +37,7 @@ class YouGetPlugin(BasePlugin):
         self.patterns = [re.compile(pattern) for pattern in cfg.patterns]
 
     def activity_types(self) -> list[str]:
-        return ["memos.memo.created", "memos.memo.updated"]
+        return [ACTIVITY_TYPE_CREATED, ACTIVITY_TYPE_UPDATED]
 
     @override
     def tag(self) -> str:

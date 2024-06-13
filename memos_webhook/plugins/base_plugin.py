@@ -4,6 +4,7 @@ from typing import Protocol
 
 import betterproto.lib.google.protobuf as pb
 
+from memos_webhook.constants import ACTIVITY_TYPE_DELETED
 from memos_webhook.dependencies.memos_cli import MemosCli
 from memos_webhook.proto_gen.memos.api import v1
 from memos_webhook.utils.logger import logger
@@ -149,7 +150,7 @@ class PluginExecutor:
         self.logger.info("Plugin task success completed")
         assert res_memo is not None, "task should return a memo"
 
-        if payload.activity_type == "memos.memo.deleted":
+        if payload.activity_type == ACTIVITY_TYPE_DELETED:
             self.logger.info("Memo deleted, skip update memo content")
             return
 
