@@ -174,4 +174,4 @@ class PluginExecutor:
             await self.update_memo_content(plugin, payload)
             return  # only execute one plugin
 
-        self.logger.info("All plugins executed")
+        self.logger.info(f"All plugins skipped for {payload.memo.name}")
