@@ -39,7 +39,7 @@ class Memo(BaseModel):
     update_time: PbTimestamp | None = None
     display_time: PbTimestamp | None = None
     content: str = ""
-    nodes: List[Node] = []  # TODO
+    nodes: List[Node] = []
     visibility: Visibility = Visibility.VISIBILITY_UNSPECIFIED
     tags: List[str] = []
     pinned: bool = False

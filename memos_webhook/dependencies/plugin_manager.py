@@ -31,10 +31,21 @@ def new_plugin_executor(cfg: Config, memos_cli: MemosCli) -> PluginExecutor:
     plugins: list[PluginProtocol] = []
     for plugin_cfg in plugins_cfgs:
         if plugin_cfg.you_get_plugin is not None:
-            plugins.append(YouGetPlugin(plugin_cfg.you_get_plugin))
+            plugins.append(
+                YouGetPlugin(
+                    plugin_cfg.name,
+                    plugin_cfg.tag,
+                    plugin_cfg.you_get_plugin,
+                )
+            )
         if plugin_cfg.zhipu_plugin is not None:
-            # TODO fix type ignore
-            plugins.append(ZhipuPlugin(plugin_cfg.zhipu_plugin)) # type: ignore
+            plugins.append(
+                ZhipuPlugin(
+                    plugin_cfg.name,
+                    plugin_cfg.tag,
+                    plugin_cfg.zhipu_plugin,
+                )
+            )
 
     _plugin_executor = PluginExecutor(memos_cli, plugins)
     return _plugin_executor
