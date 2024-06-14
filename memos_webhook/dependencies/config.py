@@ -1,3 +1,4 @@
+# mypy: disable-error-code="empty-body"
 from typing import Any
 
 from pydantic import BaseModel
@@ -41,6 +42,7 @@ def parse_config_list(raw: Any) -> list[PluginConfig]:
 arg_parser = ArgsConfigProvider()
 
 
+# type: ignore
 class Config(BaseUnmarshalConfig, BaseDotenvConfig, BaseArgsConfig):
     @from_env()
     @arg_parser.from_flag(

@@ -139,7 +139,7 @@ class PluginExecutor:
 
     async def update_memo_content(
         self, plugin: PluginProtocol, payload: v1.WebhookRequestPayload
-    ) -> v1.Memo:
+    ) -> None:
         """update memo content
         Once the task triggered, will replace the `#tag` with `#tag/done`.
         If the `#tag` not exists, will add the `#tag/done` to first line.

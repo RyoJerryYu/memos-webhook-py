@@ -5,7 +5,7 @@ from memos_webhook.plugins.zhipu_plugin import ZhipuPlugin
 from .config import Config, PluginConfig, YouGetPluginConfig
 from .memos_cli import MemosCli
 
-_plugin_executor: PluginExecutor = None
+_plugin_executor: PluginExecutor | None = None
 
 
 _DEFAULT_PLUGIN_CFG = [
@@ -33,7 +33,8 @@ def new_plugin_executor(cfg: Config, memos_cli: MemosCli) -> PluginExecutor:
         if plugin_cfg.you_get_plugin is not None:
             plugins.append(YouGetPlugin(plugin_cfg.you_get_plugin))
         if plugin_cfg.zhipu_plugin is not None:
-            plugins.append(ZhipuPlugin(plugin_cfg.zhipu_plugin))
+            # TODO fix type ignore
+            plugins.append(ZhipuPlugin(plugin_cfg.zhipu_plugin)) # type: ignore
 
     _plugin_executor = PluginExecutor(memos_cli, plugins)
     return _plugin_executor

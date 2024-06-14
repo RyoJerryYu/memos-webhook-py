@@ -2,7 +2,7 @@ import functools
 import json
 import re
 import tomllib
-from typing import Callable
+from typing import Any, Callable
 
 import yaml
 from annotated_types import T
@@ -40,7 +40,7 @@ class BaseUnmarshalConfig:
 
     _dict: dict = {}
 
-    def load(self, loader: callable, file_path: str):
+    def load(self, loader: Callable[[str], dict], file_path: str):
         if not file_path:
             return
         with open(file=file_path, mode="r") as f:
@@ -92,7 +92,7 @@ def from_unmarshal(*use_keys: str):
 
         @functools.wraps(prop.func)
         def impl(self: BaseUnmarshalConfig, *args, **kwargs) -> dict | T:
-            v = self._dict
+            v: Any = self._dict
             for k in key:
                 v = v.get(k) if v else None
             return v or prop.func(self, *args, **kwargs)

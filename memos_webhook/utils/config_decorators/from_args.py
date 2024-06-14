@@ -84,8 +84,9 @@ class ArgsConfigProvider:
 
             self.parser.add_argument(*name_or_flags, **kwargs)
 
+            attr_name: str | None
             if "dest" in kwargs:
-                attr_name: str = kwargs["dest"]
+                attr_name = kwargs["dest"]
             else:
                 attr_name = self._parsed_arg_attrs(name_or_flags)
 
