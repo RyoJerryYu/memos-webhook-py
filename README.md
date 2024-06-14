@@ -89,12 +89,24 @@ memos:
   token: xxxxxxx
 
 plugins:
-  you_get_plugins:
-    - name: download
-      tag: webhook/download
+  - name: download
+    tag: webhook/download
+    you_get_plugin:
       patterns:
         - https://twitter.com/\w+/status/\d+
         - https://x.com/\w+/status/\d+
+  - name: fix_typos
+    tag: task/fix_typos
+    zhipu_plugin:
+      api_key: xxxxxxx
+      prompt: |
+        You are a fix typos plugin.
+        Please fix the typos in the text.
+
+        The text is:
+        ```
+        {content}
+        ```
 ```
 
 And config definitionn is in [config.py](src/dependencies/config.py)
