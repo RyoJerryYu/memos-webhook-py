@@ -1,3 +1,5 @@
+from typing import Any
+
 from pydantic import BaseModel
 
 from memos_webhook.utils.config_decorators import (ArgsConfigProvider,
@@ -9,13 +11,31 @@ from memos_webhook.utils.config_decorators import (ArgsConfigProvider,
 
 
 class YouGetPluginConfig(BaseModel):
-    name: str
-    tag: str
     patterns: list[str]
 
 
+class ZhipuPluginConfig(BaseModel):
+    api_key: str
+    prompt: str
+    """Multiple lines for prompt message.
+    Just same format as langchain prompt.
+    Available variables: `{content}`"""
+
+
 class PluginConfig(BaseModel):
-    you_get_plugins: list[YouGetPluginConfig]
+    name: str
+    tag: str
+    you_get_plugin: YouGetPluginConfig | None = None
+    zhipu_plugin: ZhipuPluginConfig | None = None
+
+
+def parse_config_list(raw: Any) -> list[PluginConfig]:
+    assert isinstance(raw, list)
+    res: list[PluginConfig] = []
+    for item in raw:
+        res.append(PluginConfig.model_validate(item))
+
+    return res
 
 
 arg_parser = ArgsConfigProvider()
@@ -81,9 +101,9 @@ If not provided, will only load config from env and args.""",
     @from_unmarshal("memos", "token")
     def memos_token(self) -> str: ...
 
-    @it_is(PluginConfig)
+    @it_is(list[PluginConfig], transformer=parse_config_list)
     @from_unmarshal()
-    def plugins(self) -> PluginConfig: ...
+    def plugins(self) -> list[PluginConfig]: ...
 
 
 _config: Config

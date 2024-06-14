@@ -32,7 +32,7 @@ async def lifespan(app: FastAPI):
         logger.info(f"memos info: {cfg.memos_host}:{cfg.memos_port}")
         logger.info(f"log level: {cfg.log_level}")
         if cfg.plugins:
-            plugin_names = [plugin.name for plugin in cfg.plugins.you_get_plugins]
+            plugin_names = [plugin.name for plugin in cfg.plugins]
             logger.info(f"plugins: {plugin_names}")
         logger.info(f"")
         with new_memos_cli(cfg) as memos_cli:
