@@ -182,8 +182,10 @@ class PluginExecutor:
         for plugin in self.plugins:
             self.logger.info(f"Execute plugin: {plugin}")
             if not plugin.should_trigger(payload=payload):
+                self.logger.debug(f"Plugin skipped for {payload.memo.name}")
                 continue
 
+            self.logger.debug(f"Plugin triggered for {payload.memo.name}")
             await self.update_memo_content(plugin, payload)
             return  # only execute one plugin
 
