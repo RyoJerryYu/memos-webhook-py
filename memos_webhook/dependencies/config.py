@@ -31,6 +31,8 @@ class PluginConfig(BaseModel):
 
 
 def parse_config_list(raw: Any) -> list[PluginConfig]:
+    if raw is None:
+        return []
     assert isinstance(raw, list)
     res: list[PluginConfig] = []
     for item in raw:
