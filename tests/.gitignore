@@ -1,2 +1,3 @@
 .download
 docker_compose.yaml
+config.yaml

@@ -17,7 +17,7 @@ class MemosCli:
     resource_service: v1.ResourceServiceStub
 
 
-_cli: MemosCli = None
+_cli: MemosCli | None = None
 
 
 @contextlib.contextmanager

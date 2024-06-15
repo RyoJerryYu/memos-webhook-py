@@ -32,7 +32,7 @@ def always_property(wrapper: Callable[[ConfigProperty[T]], ConfigProperty[T]]):
     def wrapped(prop: ConfigProperty[T] | Callable[[], T]) -> ConfigProperty[T]:
         if inspect.isfunction(prop):
             return wrapper(ConfigProperty(prop))
-        return wrapper(prop)
+        return wrapper(prop) # type: ignore
 
     return wrapped
 

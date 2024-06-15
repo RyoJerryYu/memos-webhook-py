@@ -17,7 +17,7 @@ def old_row_status_to_proto(row_status: OldRowStatus) -> v1.RowStatus:
 
 def old_timestamp_to_proto(timestamp: OldPbTimestamp | None) -> datetime:
     if timestamp is None:
-        return None
+        return None # type: ignore
     return datetime.fromtimestamp(timestamp.seconds + (timestamp.nanos) * 0.001)
 
 
@@ -29,9 +29,9 @@ def old_resource_to_proto(input: OldResource) -> v1.Resource:
     return v1.Resource(
         name=input.name,
         uid=input.uid,
-        create_time=input.create_time,
+        create_time=old_timestamp_to_proto(input.create_time),
         filename=input.filename,
-        content=input.content,
+        content=input.content, # type: ignore
         external_link=input.external_link,
         type=input.type,
         size=input.size,
@@ -74,5 +74,5 @@ def old_payload_to_proto(input: OldPayload) -> v1.WebhookRequestPayload:
         activity_type=input.activityType,
         creator_id=input.creatorId,
         create_time=datetime.fromtimestamp(input.createdTs),
-        memo=old_memo_to_proto(input.memo),
+        memo=old_memo_to_proto(input.memo), # type: ignore
     )

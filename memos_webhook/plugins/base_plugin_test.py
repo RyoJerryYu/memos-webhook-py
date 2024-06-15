@@ -9,13 +9,12 @@ from .base_plugin import BasePlugin
 
 
 class MockPlugin(BasePlugin):
+    def __init__(self) -> None:
+        super().__init__(name="mock", tag="hook/download")
+
     @override
     def activity_types(self) -> list[str]:
         return ["memos.memo.created"]
-
-    @override
-    def tag(self) -> str:
-        return "hook/download"
 
     @override
     async def task(self, payload: v1.WebhookRequestPayload, memos_cli: MemosCli) -> v1.Memo:
@@ -23,13 +22,12 @@ class MockPlugin(BasePlugin):
 
 
 class MockOverwritePlugin(BasePlugin):
+    def __init__(self) -> None:
+        super().__init__(name="mock", tag="hook/download")
+
     @override
     def activity_types(self) -> list[str]:
         return ["memos.memo.created"]
-
-    @override
-    def tag(self) -> str:
-        return "hook/download"
     
     @override
     def additional_trigger(self, payload: v1.WebhookRequestPayload) -> bool:

@@ -6,7 +6,6 @@ from typing import override
 
 import aiofiles
 import aiofiles.os
-import betterproto.lib.google.protobuf as pb
 
 from memos_webhook.constants import (ACTIVITY_TYPE_CREATED,
                                      ACTIVITY_TYPE_UPDATED)
@@ -28,20 +27,21 @@ def extract_urls(content: str, patterns: list[re.Pattern[str]]) -> list[str]:
 
 class YouGetPlugin(BasePlugin):
     logger: Logger = pluginLogger.getChild("YouGetPlugin")
+    _name: str
+    _tag: str
     cfg: YouGetPluginConfig
     patterns: list[re.Pattern[str]]
 
-    def __init__(self, cfg: YouGetPluginConfig) -> None:
-        super().__init__()
+    def __init__(self, name: str, tag: str, cfg: YouGetPluginConfig) -> None:
+        super().__init__(name=name, tag=tag)
+        self._name = name
+        self._tag = tag
         self.cfg = cfg
         self.patterns = [re.compile(pattern) for pattern in cfg.patterns]
 
+    @override
     def activity_types(self) -> list[str]:
         return [ACTIVITY_TYPE_CREATED, ACTIVITY_TYPE_UPDATED]
-
-    @override
-    def tag(self) -> str:
-        return self.cfg.tag
 
     @override
     def additional_trigger(self, payload: v1.WebhookRequestPayload) -> bool:
@@ -55,7 +55,7 @@ class YouGetPlugin(BasePlugin):
         self, payload: v1.WebhookRequestPayload, memos_cli: MemosCli
     ) -> v1.Memo:
         memo_name = payload.memo.name
-        self.logger.info(f"Start {self.cfg.name} webhook task for memo: {memo_name}")
+        self.logger.info(f"Start {self._name} webhook task for memo: {memo_name}")
 
         # list memo resources
         list_res_resp = await memos_cli.memo_service.list_memo_resources(
