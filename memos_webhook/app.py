@@ -4,7 +4,8 @@ import asyncio
 import contextlib
 from typing import Annotated, Any
 
-from fastapi import BackgroundTasks, Depends, FastAPI, Request
+from fastapi import BackgroundTasks, Depends, FastAPI, Request, status
+from fastapi.responses import JSONResponse
 
 import memos_webhook.proto_gen.memos.api.v1 as v1
 from memos_webhook.dependencies.config import get_config, new_config
@@ -77,8 +78,14 @@ async def webhook_handler(
     """The new webhook handler, use protojson."""
     dict_json = await req.json()
     logger.debug(f"webhook handler received request: {dict_json}")
-
-    proto_payload = v1.WebhookRequestPayload().from_dict(dict_json)
+    try:
+        proto_payload = v1.WebhookRequestPayload().from_dict(dict_json)
+    except Exception as e:
+        logger.error(f"parse payload error: {e}")
+        return JSONResponse(
+            content={"code": 1, "message": f"parse payload error: {e}"},
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        )
     background_tasks.add_task(webhook_task, proto_payload, executor)
     return {
         "code": 0,
