@@ -1,4 +1,4 @@
-from memos_webhook.plugins.base_plugin import PluginExecutor, PluginProtocol
+from memos_webhook.plugins.base_plugin import IPlugin, PluginExecutor
 from memos_webhook.plugins.you_get_plugin import YouGetPlugin
 from memos_webhook.plugins.zhipu_plugin import ZhipuPlugin
 
@@ -28,7 +28,7 @@ def new_plugin_executor(cfg: Config, memos_cli: MemosCli) -> PluginExecutor:
     if plugins_cfgs is None:
         plugins_cfgs = _DEFAULT_PLUGIN_CFG  # temp fake cfg
 
-    plugins: list[PluginProtocol] = []
+    plugins: list[IPlugin] = []
     for plugin_cfg in plugins_cfgs:
         if plugin_cfg.you_get_plugin is not None:
             plugins.append(

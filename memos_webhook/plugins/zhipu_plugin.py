@@ -1,5 +1,5 @@
 from logging import Logger
-from typing import Any, Coroutine, override
+from typing import override
 
 from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers.string import StrOutputParser
@@ -15,15 +15,11 @@ from .base_plugin import BasePlugin, pluginLogger
 
 class ZhipuPlugin(BasePlugin):
     logger: Logger = pluginLogger.getChild("ZhipuPlugin")
-    _name: str
-    _tag: str
     cfg: ZhipuPluginConfig
     chain: RunnableSerializable
 
     def __init__(self, name: str, tag: str, cfg: ZhipuPluginConfig) -> None:
-        super().__init__()
-        self._name = name
-        self._tag = tag
+        super().__init__(name=name, tag=tag)
         self.cfg = cfg
         llm = ZhipuAIChatModel(api_key=cfg.api_key)
         self.chain = (
@@ -38,13 +34,9 @@ class ZhipuPlugin(BasePlugin):
         return ["memos.memo.created"]
 
     @override
-    def tag(self) -> str:
-        return self._tag
-
-    @override
     async def task(self, payload: WebhookRequestPayload, memos_cli: MemosCli) -> Memo:
         self.logger.debug("start zhipu plugin task")
-        content = payload.memo.content.replace(f"#{self._tag}", "")
+        content = payload.memo.content.replace(f"#{self.tag}", "")
         self.logger.debug(f"content: {content}")
 
         res: str = await self.chain.ainvoke(input=content)

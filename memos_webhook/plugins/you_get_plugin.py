@@ -6,7 +6,6 @@ from typing import override
 
 import aiofiles
 import aiofiles.os
-import betterproto.lib.google.protobuf as pb
 
 from memos_webhook.constants import (ACTIVITY_TYPE_CREATED,
                                      ACTIVITY_TYPE_UPDATED)
@@ -34,7 +33,7 @@ class YouGetPlugin(BasePlugin):
     patterns: list[re.Pattern[str]]
 
     def __init__(self, name: str, tag: str, cfg: YouGetPluginConfig) -> None:
-        super().__init__()
+        super().__init__(name=name, tag=tag)
         self._name = name
         self._tag = tag
         self.cfg = cfg
@@ -43,10 +42,6 @@ class YouGetPlugin(BasePlugin):
     @override
     def activity_types(self) -> list[str]:
         return [ACTIVITY_TYPE_CREATED, ACTIVITY_TYPE_UPDATED]
-
-    @override
-    def tag(self) -> str:
-        return self._tag
 
     @override
     def additional_trigger(self, payload: v1.WebhookRequestPayload) -> bool:

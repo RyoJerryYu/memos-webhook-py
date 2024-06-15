@@ -13,8 +13,8 @@ from memos_webhook.webhook.types.webhook_payload import WebhookPayload
 pluginLogger = logger.getChild("plugin")
 
 
-class PluginProtocol(Protocol):
-    """The protocol that plugin executor trully need a plugin to implement.
+class IPlugin(Protocol):
+    """The interface that plugin executor trully need a plugin to implement.
 
     You should implement `BasePlugin` instead of this protocol.
     Unless you know what you are doing."""
@@ -27,13 +27,34 @@ class PluginProtocol(Protocol):
     def should_trigger(self, payload: v1.WebhookRequestPayload) -> bool: ...
 
 
-class BasePlugin(PluginProtocol, ABC):
+class BasePlugin(IPlugin, ABC):
     """The abstract class for webhook plugin.
 
     DO NOT extend this class more than two levels.
     Use composition instead of inheritance."""
 
     logger = pluginLogger.getChild("BasePlugin")
+
+    name: str
+    """Name for the webhook plugin."""
+
+    tag: str
+    """Tag for the webhook plugin focus on.
+
+    The task will be triggered by memos with `#tag`.
+    And will never be triggered by memos with `#tag/done`.
+
+    We also call `#tag/done` as a `negative tag`.
+
+    Once the task triggered, will replace the `#tag` with `#tag/done`.
+    If the `#tag` not exists, will add the `#tag/done` to first line.
+    """
+
+    def __init__(self, name: str, tag: str) -> None:
+        assert name, "name should not be empty"
+        assert tag, "tag should not be empty"
+        self.name = name
+        self.tag = tag
 
     @abstractmethod
     def activity_types(self) -> list[str]:
@@ -46,20 +67,6 @@ class BasePlugin(PluginProtocol, ABC):
         - `memos.memo.created`
         - `memos.memo.updated`
         - `memos.memo.deleted`
-        """
-        ...
-
-    @abstractmethod
-    def tag(self) -> str:
-        """Tag for the webhook plugin focus on.
-
-        The task will be triggered by memos with `#tag`.
-        And will never be triggered by memos with `#tag/done`.
-
-        We also call `#tag/done` as a `negative tag`.
-
-        Once the task triggered, will replace the `#tag` with `#tag/done`.
-        If the `#tag` not exists, will add the `#tag/done` to first line.
         """
         ...
 
@@ -79,11 +86,11 @@ class BasePlugin(PluginProtocol, ABC):
 
     def positive_tag(self) -> str:
         """The positive tag for the webhook plugin."""
-        return f"#{self.tag()}"
+        return f"#{self.tag}"
 
     def negative_tag(self) -> str:
         """The negative tag for the webhook plugin."""
-        return f"#{self.tag()}/done"
+        return f"#{self.tag}/done"
 
     def additional_trigger(self, payload: v1.WebhookRequestPayload) -> bool:
         """The additional trigger besides the tag.
@@ -128,17 +135,17 @@ class BasePlugin(PluginProtocol, ABC):
 class PluginExecutor:
     """The class responsible for execute one plugin for one payload."""
 
-    plugins: list[PluginProtocol]
+    plugins: list[IPlugin]
     memos_cli: MemosCli
     logger: Logger
 
-    def __init__(self, memos_cli: MemosCli, plugins: list[PluginProtocol]) -> None:
+    def __init__(self, memos_cli: MemosCli, plugins: list[IPlugin]) -> None:
         self.memos_cli = memos_cli
         self.plugins = plugins
         self.logger = logger.getChild("PluginExecutor")
 
     async def update_memo_content(
-        self, plugin: PluginProtocol, payload: v1.WebhookRequestPayload
+        self, plugin: IPlugin, payload: v1.WebhookRequestPayload
     ) -> None:
         """update memo content
         Once the task triggered, will replace the `#tag` with `#tag/done`.
