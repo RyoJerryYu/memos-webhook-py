@@ -18,14 +18,20 @@ class ZhipuPlugin(BasePlugin):
     _name: str
     _tag: str
     cfg: ZhipuPluginConfig
-    llm: ZhipuAIChatModel
+    chain: RunnableSerializable
 
     def __init__(self, name: str, tag: str, cfg: ZhipuPluginConfig) -> None:
         super().__init__()
         self._name = name
         self._tag = tag
         self.cfg = cfg
-        self.llm = ZhipuAIChatModel(api_key=cfg.api_key)
+        llm = ZhipuAIChatModel(api_key=cfg.api_key)
+        self.chain = (
+            {"content": RunnablePassthrough()}
+            | PromptTemplate.from_template(self.cfg.prompt)
+            | llm
+            | StrOutputParser()
+        )
 
     @override
     def activity_types(self) -> list[str]:
@@ -38,16 +44,10 @@ class ZhipuPlugin(BasePlugin):
     @override
     async def task(self, payload: WebhookRequestPayload, memos_cli: MemosCli) -> Memo:
         self.logger.debug("start zhipu plugin task")
-        content = payload.memo.content
+        content = payload.memo.content.replace(f"#{self._tag}", "")
         self.logger.debug(f"content: {content}")
-        chain: RunnableSerializable = (
-            {"content": RunnablePassthrough()}
-            | PromptTemplate.from_template(self.cfg.prompt)
-            | self.llm
-            | StrOutputParser()
-        )
 
-        res: str = await chain.ainvoke({"content": content})
+        res: str = await self.chain.ainvoke(input=content)
         res_content = f"""{payload.memo.content}
 
 ---AI Generated---
